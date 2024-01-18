@@ -150,8 +150,12 @@ def record_to_rosbag(gt_path, joint_path, imu_path, rgb_path, depth_path,evnet_p
                 time_rgb_nsec = int(time_image%1e6*1000)
                 sensor_type = png_path.split('_')[2].split('.')[0]
                 if  sensor_type == 'event':
+                    image_msg.header = Header(stamp=rospy.Time(time_rgb_sec, time_rgb_nsec), 
+                                          frame_id="event_depth_"+str(time_image))
                     bag.write('/event_depth_topic', image_msg, t=rospy.Time(time_rgb_sec, time_rgb_nsec)) 
                 elif sensor_type == 'rgb':
+                    image_msg.header = Header(stamp=rospy.Time(time_rgb_sec, time_rgb_nsec), 
+                                          frame_id="rgb_depth_"+str(time_image))
                     bag.write('/rgb_depth_topic', image_msg, t=rospy.Time(time_rgb_sec, time_rgb_nsec)) 
                 
         # 5. event data
