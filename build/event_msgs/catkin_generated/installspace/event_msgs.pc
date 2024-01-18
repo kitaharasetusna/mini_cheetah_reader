@@ -1,0 +1,8 @@
+prefix=/home/bear/Desktop/data_reader/install
+
+Name: event_msgs
+Description: Description of event_msgs
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: std_msgs message_runtime

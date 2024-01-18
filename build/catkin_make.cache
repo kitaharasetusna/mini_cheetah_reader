@@ -1,0 +1,2 @@
+event_msgs
+-DCATKIN_DEVEL_PREFIX=/home/bear/Desktop/data_reader/devel -DCMAKE_INSTALL_PREFIX=/home/bear/Desktop/data_reader/install -G Unix Makefiles
