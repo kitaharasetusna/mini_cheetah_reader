@@ -1,3 +1,15 @@
+supported version
+```
+python2.7
+ubuntu18.04
+ros-melodic
+```
+
+# 0. workspace
+```
+source ./devel/setup.bash
+```
+
 # 1. recording data
 ```
 python ./main.py --input_dir ../data/mocap_env1_comb/ --gt_pose --imu --joint --rgb
