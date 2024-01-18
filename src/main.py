@@ -3,6 +3,7 @@ import cv2
 import rosbag
 from sensor_msgs.msg import Image
 from std_msgs.msg import Float32MultiArray 
+from std_msgs.msg import Header
 from sensor_msgs.msg import Imu
 from geometry_msgs.msg import PoseStamped, Pose, Point, Quaternion
 from sensor_msgs.msg import JointState
@@ -41,6 +42,8 @@ def record_to_rosbag(gt_path, joint_path, imu_path, rgb_path, depth_path,evnet_p
                     msg_gt.pose.orientation.y = data_gt[4]
                     msg_gt.pose.orientation.z = data_gt[5]
                     msg_gt.pose.orientation.w = data_gt[6]
+                    # Create a header with the timestamp
+                    msg_gt.header = Header(stamp=rospy.Time(time_gt_sec, time_gt_nsec), frame_id="gt_pose_"+str(record_gt[0]))
                     bag.write('/gt_topic', msg_gt, t=rospy.Time(time_gt_sec, time_gt_nsec))
                     if idx==0:
                         min_idx = time_gt_sec
@@ -65,6 +68,8 @@ def record_to_rosbag(gt_path, joint_path, imu_path, rgb_path, depth_path,evnet_p
                 msg_joint.position = data_joint
                 msg_joint.name = ['FR_abduct', 'FR_thigh','FR_knee', 'FL_abduct', 'FL_thigh', 'FL_knee',
                                   'HR_abduct', 'HR_thigh', 'HR_knee', 'HL_abduct', 'HL_thigh', 'HL_knee']
+                msg_joint.header = Header(stamp=rospy.Time(time_joint_sec, time_joint_nsec), 
+                                          frame_id="joint_"+str(record_joint[0]))
                 bag.write('/joint_topic', msg_joint, t=rospy.Time(time_joint_sec, time_joint_nsec))
                 if idx==0:
                     min_idx = time_joint_sec
@@ -104,6 +109,8 @@ def record_to_rosbag(gt_path, joint_path, imu_path, rgb_path, depth_path,evnet_p
                     msg_imu.orientation_covariance =  [1, 0, 0, 0, 1, 0, 0, 0, 1]
                     msg_imu.linear_acceleration_covariance =  [1, 0, 0, 0, 1, 0, 0, 0, 1]
                     msg_imu.angular_velocity_covariance =  [1, 0, 0, 0, 1, 0, 0, 0, 1]
+                    msg_imu.header = Header(stamp=rospy.Time(time_imu_sec, time_imu_nsec), 
+                                          frame_id="imu_"+str(record_imu[0]))
                     bag.write('/imu_topic', msg_imu, t=rospy.Time(time_imu_sec, time_imu_nsec))
                     if idx==0:
                         min_idx = time_imu_sec
@@ -123,6 +130,8 @@ def record_to_rosbag(gt_path, joint_path, imu_path, rgb_path, depth_path,evnet_p
                 time_image =  float(png_path.split('_')[0])
                 time_rgb_sec = int(time_image//1e6)
                 time_rgb_nsec = int(time_image%1e6*1000)
+                image_msg.header = Header(stamp=rospy.Time(time_rgb_sec, time_rgb_nsec), 
+                                          frame_id="rgb_"+str(time_image))
                 bag.write('/rgb_topic', image_msg, t=rospy.Time(time_rgb_sec, time_rgb_nsec)) 
 
         # 4. depth data 
