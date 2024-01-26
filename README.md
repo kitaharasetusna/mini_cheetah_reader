@@ -25,6 +25,7 @@ use the command above to record data in the form of rosbag. Options are provided
 |--event | event camera  :camera:|Event.msg|
 |--depth|depth camera  :camera:|Image.msg|
 |--rgb|RGB camera  :camera:|Image.msg|
+|--lidar|Lidar data||
 
 
 
@@ -42,7 +43,8 @@ python ./main.py --input_dir ../data/mocap_env1_comb/ --event
 ## 2.2 optinal alternative :cat: 
 You may use third-party cpp project to transfer aedat4 file to rosbag and merge the event bad with your target
 
-
+## 2.3 Add lidar data:
+For now, you can only merge two rosbag
 
 
 # 3. verify rosbag
