@@ -15,12 +15,20 @@ source ./devel/setup.bash
 python ./main.py --input_dir ../data/mocap_env1_comb/ --gt_pose --imu --joint --rgb
 ```
 
-
+P.S. :disappointed: Attention! since pyros require python2.7 while dv-processing is not supported by python2.7. Users need to read from event data as txt as follows then use the above command to record event data.
 ## 1.1 record event data
 1. get event.txt
 ```
 python3 ./read_event_data.py --input_dir ../data/mocap_env1_comb/ 
 ```
+2. record event data
+```
+python ./main.py --input_dir ../data/mocap_env1_comb/ --event
+```
+
+
+
+
 
 # 2. verify rosbag
 
