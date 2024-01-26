@@ -158,7 +158,22 @@ def record_to_rosbag(gt_path, joint_path, imu_path, rgb_path, depth_path,evnet_p
                     bag.write('/rgb_depth_topic', image_msg, t=rospy.Time(time_rgb_sec, time_rgb_nsec)) 
                 
         # 5. event data
-        print('reading event')
+        if args.event==True:
+            print('reading event')
+            with open(evnet_path, 'rb') as f:
+                events=f.readlines()
+                f.close()
+            for idx_event, event in enumerate(events):
+                tmp_cur_line = event.split()
+                msg_Event = Event()
+                msg_Event.x = int(tmp_cur_line[1])
+                msg_Event.y = int(tmp_cur_line[2])
+                msg_Event.polarity = bool(tmp_cur_line[3])
+                event_time = float(tmp_cur_line[0])
+                time_sec = int(event_time//1e6)
+                time_nsec = int(event_time%6*1000)
+                msg_Event.ts = rospy.Time(time_sec, time_nsec)
+                bag.write('/event_topic.msg', msg_Event, t=rospy.Time(time_sec, time_nsec))
         # msg_Event = Event()
         # msg_Event.x = 1
         # msg_Event.y = 2
@@ -181,7 +196,7 @@ if __name__ == "__main__":
     imu_path = root_folder+'vectornav.txt'
     rgb_path = root_folder+'rgb/'
     depth_path = root_folder+'depth/'
-    aedat_file = root_folder+'event.aedat4'
+    aedat_file = root_folder+'event.txt'
 
     output_bag_filename = root_folder+'output.bag'
 
