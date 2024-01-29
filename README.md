@@ -25,7 +25,7 @@ use the command above to record data in the form of rosbag. Options are provided
 |--event | event camera  :camera:|Event.msg|
 |--depth|depth camera  :camera:|Image.msg|
 |--rgb|RGB camera  :camera:|Image.msg|
-|--lidar|Lidar data||
+|--lidar|Lidar data|sensor_msgs/PointCloud2|
 
 
 
