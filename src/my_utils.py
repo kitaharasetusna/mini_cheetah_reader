@@ -16,6 +16,7 @@ def getargs():
     parser.add_argument('-e', '--event', action='store_true', help='Enable verbose mode')
     parser.add_argument('-r', '--rgb', action='store_true', help='Enable verbose mode')
     parser.add_argument('-d', '--depth', action='store_true', help='Enable verbose mode')
+    parser.add_argument('-l', '--lidar', action='store_true', help='Enable verbose mode')
     # parser.add_argument('--threshold', type=float, default=0.5, help='Threshold value (default: 0.5)')
 
     # Parse the command-line argumen

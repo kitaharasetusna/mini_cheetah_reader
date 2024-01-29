@@ -7,15 +7,17 @@ from std_msgs.msg import Header
 from sensor_msgs.msg import Imu
 from geometry_msgs.msg import PoseStamped, Pose, Point, Quaternion
 from sensor_msgs.msg import JointState
+from sensor_msgs.msg import PointCloud2
 from cv_bridge import CvBridge
 import rospy
+import rosbag
 
 
 from my_utils import getargs
 from my_utils import get_png_files 
 from event_msgs.msg import Event
 
-def record_to_rosbag(gt_path, joint_path, imu_path, rgb_path, depth_path,evnet_path, output_bag_filename, args):
+def record_to_rosbag(gt_path, joint_path, imu_path, rgb_path, depth_path,evnet_path, output_bag_filename, lidar_path, args):
     # Initialize a ROS bag file
     with rosbag.Bag(output_bag_filename, 'w') as bag:
         # Create a CvBridge to convert between OpenCV images and ROS images
@@ -180,6 +182,22 @@ def record_to_rosbag(gt_path, joint_path, imu_path, rgb_path, depth_path,evnet_p
         # msg_Event.ts = rospy.Time(1000, 1000)
         # msg_Event.polarity = False
         # bag.write('/event_topic.msg', msg_Event, t=rospy.Time(1000, 1000))
+        if args.lidar == True:
+            print('reading lidar data ...')
+            # Specify the input and output bag file paths
+            input_bag_path = lidar_path 
+            # Open the input bag file for reading
+            input_bag = rosbag.Bag(input_bag_path, 'r')
+
+            # Iterate through the messages in the input bag
+            for topic, msg, t in input_bag.read_messages(topics=['/velodyne_points']):
+                # Check if the message is of type PointCloud2
+                bag.write(topic, msg, t)
+            # Close both input and output bags when done
+            input_bag.close()
+        
+        
+        bag.close()
 
 
 
@@ -197,10 +215,11 @@ if __name__ == "__main__":
     rgb_path = root_folder+'rgb/'
     depth_path = root_folder+'depth/'
     aedat_file = root_folder+'event.txt'
+    lidar_path = root_folder+'lidar.bag'
 
     output_bag_filename = root_folder+'output.bag'
 
     record_to_rosbag(gt_path=gt_path, joint_path=joint_path, imu_path=imu_path,
                     rgb_path=rgb_path, depth_path=depth_path, evnet_path=aedat_file,
                     output_bag_filename=output_bag_filename, 
-                    args=args)
+                    args=args, lidar_path=lidar_path)
